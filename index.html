@@ -1,297 +1,262 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>TitanSub Systems</title>
-<style>
-/* BODY & BACKGROUND */
-body{
-    font-family:'Segoe UI',sans-serif;
-    margin:0;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-}
+  <title>TitanSub Systems</title>
+  <style>
+    body{
+      font-family:'Segoe UI',sans-serif;
+      margin:0;
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      flex-direction:column;
+    }
 
-/* HEADER */
-header{
-    background: linear-gradient(to right,#3b1f70,#5a2fae);
-    color:white;
-    padding:20px;
-    text-align:center;
-}
+    header{
+      background:linear-gradient(to right,#141e30,#243b55);
+      color:white;
+      padding:20px;
+      text-align:center;
+      width:100%;
+    }
 
-/* HERO IMAGE */
-.hero{
-    background:url("https://images.unsplash.com/photo-1556740749-887f6717d7e4") center/cover no-repeat;
-    height:250px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:28px;
-    font-weight:bold;
-}
+    .container{
+      background:white;
+      padding:25px;
+      border-radius:15px;
+      width:450px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.25);
+      text-align:center;
+    }
 
-/* CONTAINER */
-.container{
-    padding:20px;
-    text-align:center;
-}
+    input, select{
+      padding:10px;
+      margin:8px 0;
+      width:90%;
+      border-radius:5px;
+      border:1px solid #ccc;
+      font-size:14px;
+    }
 
-/* INPUT */
-input{
-    padding:10px;
-    margin:10px 0;
-    width:220px;
-    border-radius:5px;
-    border:1px solid #ccc;
-}
+    button{
+      padding:10px 18px;
+      margin:8px 0;
+      background:#007bff;
+      color:white;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      transition:.3s;
+      font-size:14px;
+    }
 
-/* BUTTON */
-button{
-    padding:10px 18px;
-    background:#6c5ce7;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    transition:.3s;
-}
+    button:hover{
+      background:#0056b3;
+      transform:scale(1.05);
+    }
 
-button:hover{
-    background:#341f97;
-    transform:scale(1.05);
-}
+    .hidden{display:none;}
 
-/* HIDDEN CLASS */
-.hidden{
-    display:none;
-}
+    .plans{
+      display:flex;
+      justify-content:center;
+      gap:20px;
+      flex-wrap:wrap;
+      margin-top:15px;
+    }
 
-/* PLANS */
-.plans{
-    display:flex;
-    justify-content:center;
-    gap:25px;
-    flex-wrap:wrap;
-    margin-top:20px;
-}
+    .plan-card{
+      background:white;
+      padding:15px;
+      width:120px;
+      border-radius:12px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
 
-.plan-card{
-    background:white;
-    color:#333;
-    padding:20px;
-    width:230px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.1);
-    transition:.3s;
-}
+    .plan-card h3{
+      margin:5px 0;
+    }
 
-.plan-card:hover{
-    transform:translateY(-10px);
-}
+    .plan-card p{
+      font-size:12px;
+      margin:2px 0;
+    }
 
-.plan-card img{
-    width:80px;
-    margin-bottom:10px;
-}
+    .dashboard ul{
+      list-style:none;
+      padding:0;
+    }
 
-/* DASHBOARD */
-.dashboard{
-    background:white;
-    color:#333;
-    padding:25px;
-    width:320px;
-    margin:20px auto;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.1);
-}
+    .dashboard li{
+      background:#f4f6f8;
+      margin:6px 0;
+      padding:8px;
+      border-radius:6px;
+      font-size:14px;
+    }
 
-/* FOOTER */
-footer{
-    background:#3b1f70;
-    color:white;
-    padding:15px;
-    text-align:center;
-    margin-top:40px;
-}
-</style>
+    footer{
+      margin-top:20px;
+      color:white;
+    }
+
+  </style>
 </head>
-
 <body>
 
 <header>
-<h1>TitanSub Systems</h1>
+  <h1>TitanSub Systems</h1>
 </header>
-
-<div class="hero">
-Manage Your Business With Smart Subscriptions
-</div>
 
 <div class="container">
 
-<!-- REGISTER -->
-<div id="registerSection">
-<h2>Register</h2>
-<input type="text" id="regName" placeholder="Enter Name"><br>
-<input type="email" id="regEmail" placeholder="Enter Email"><br>
-<input type="password" id="regPassword" placeholder="Enter Password"><br>
-<button onclick="register()">Register</button>
-<p>Already have account? <button onclick="showLogin()">Login</button></p>
-</div>
+  <!-- REGISTER -->
+  <div id="registerSection">
+    <h2>Register</h2>
+    <input type="text" id="regName" placeholder="Name"><br>
+    <input type="email" id="regEmail" placeholder="Email"><br>
+    <input type="password" id="regPassword" placeholder="Password"><br>
+    <button onclick="register()">Register</button>
+    <p>Already have account? <button onclick="showLogin()">Login</button></p>
+  </div>
 
-<!-- LOGIN -->
-<div id="loginSection" class="hidden">
-<h2>Login</h2>
-<input type="email" id="loginEmail" placeholder="Enter Email"><br>
-<input type="password" id="loginPassword" placeholder="Enter Password"><br>
-<button onclick="login()">Login</button>
-<p>Don't have account? <button onclick="showRegister()">Register</button></p>
-</div>
+  <!-- LOGIN -->
+  <div id="loginSection" class="hidden">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email"><br>
+    <input type="password" id="loginPassword" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <p>Don't have account? <button onclick="showRegister()">Register</button></p>
+  </div>
 
-<!-- PLANS -->
-<div id="planSection" class="hidden">
-<h2>Choose Your Plan</h2>
+  <!-- PLAN -->
+  <div id="planSection" class="hidden">
+    <h2>Choose Your Plan</h2>
+    <div class="plans">
+      <div class="plan-card">
+        <h3>Basic</h3>
+        <p>₹199 / Month</p>
+        <button onclick="subscribe('Basic',199)">Subscribe</button>
+      </div>
+      <div class="plan-card">
+        <h3>Standard</h3>
+        <p>₹499 / Month</p>
+        <button onclick="subscribe('Standard',499)">Subscribe</button>
+      </div>
+      <div class="plan-card">
+        <h3>Premium</h3>
+        <p>₹999 / Month</p>
+        <button onclick="subscribe('Premium',999)">Subscribe</button>
+      </div>
+    </div>
+    <br>
+    <button onclick="logout()">Logout</button>
+  </div>
 
-<div class="plans">
-
-<div class="plan-card">
-<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-<h3>Basic</h3>
-<p>₹199 / Month</p>
-<p>5 Products</p>
-<button onclick="subscribe('Basic',199)">Subscribe</button>
-</div>
-
-<div class="plan-card">
-<img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
-<h3>Standard</h3>
-<p>₹499 / Month</p>
-<p>20 Products</p>
-<button onclick="subscribe('Standard',499)">Subscribe</button>
-</div>
-
-<div class="plan-card">
-<img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png">
-<h3>Premium</h3>
-<p>₹999 / Month</p>
-<p>Unlimited Products</p>
-<button onclick="subscribe('Premium',999)">Subscribe</button>
-</div>
-
-</div>
-
-<br>
-<button onclick="logout()">Logout</button>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboardSection" class="hidden">
-<div class="dashboard">
-<h2>User Dashboard</h2>
-<p id="welcome"></p>
-<p id="planInfo"></p>
-<p id="expiryInfo"></p>
-<button onclick="logout()">Logout</button>
-</div>
-</div>
+  <!-- DASHBOARD -->
+  <div id="dashboardSection" class="hidden">
+    <h2>Dashboard</h2>
+    <p id="welcome"></p>
+    <div class="dashboard">
+      <h3>All Subscribed Users</h3>
+      <ul id="subList"></ul>
+    </div>
+    <button onclick="logout()">Logout</button>
+  </div>
 
 </div>
 
 <footer>
-© 2026 TitanSub Systems
+  © 2026 TitanSub Systems
 </footer>
 
 <script>
-/* AUTO LOGIN */
-window.onload=function(){
-    let plan=localStorage.getItem("plan");
-    let user=localStorage.getItem("user");
-    if(plan && user){ showDashboard(); }
-};
+  // Auto-login
+  window.onload=function(){
+    let currentUser = localStorage.getItem("currentUser");
+    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+    if(currentUser && subscriptions.length>0){ showDashboard(); }
+  }
 
-function showLogin(){
+  function showLogin(){
     registerSection.classList.add("hidden");
     loginSection.classList.remove("hidden");
-}
+  }
 
-function showRegister(){
+  function showRegister(){
     loginSection.classList.add("hidden");
     registerSection.classList.remove("hidden");
-}
+  }
 
-function register(){
-    let name=regName.value.trim();
-    let email=regEmail.value.trim();
-    let password=regPassword.value.trim();
+  function register(){
+    let name = regName.value.trim();
+    let email = regEmail.value.trim();
+    let password = regPassword.value.trim();
+    if(!name||!email||!password){ alert("Fill all fields"); return; }
 
-    if(!name||!email||!password){
-        alert("Fill all fields");
-        return;
-    }
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    if(users.find(u=>u.email===email)){ alert("Email already registered"); return; }
 
-    localStorage.setItem("user", JSON.stringify({name,email,password}));
+    users.push({name,email,password});
+    localStorage.setItem("users", JSON.stringify(users));
 
     alert("Registration Successful");
     showLogin();
-}
+  }
 
-function login(){
+  function login(){
     let email=loginEmail.value;
     let password=loginPassword.value;
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let user = users.find(u=>u.email===email && u.password===password);
 
-    let user=JSON.parse(localStorage.getItem("user"));
+    if(user){
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      alert("Login Successful");
+      loginSection.classList.add("hidden");
+      planSection.classList.remove("hidden");
+    } else { alert("Invalid login"); }
+  }
 
-    if(!user){
-        alert("Register first");
-        return;
-    }
-
-    if(email===user.email && password===user.password){
-        alert("Login Successful");
-        loginSection.classList.add("hidden");
-        planSection.classList.remove("hidden");
-    }else{
-        alert("Invalid Login");
-    }
-}
-
-function subscribe(plan,price){
-    let expiry=new Date();
+  function subscribe(plan,price){
+    let expiry = new Date();
     expiry.setMonth(expiry.getMonth()+1);
 
-    localStorage.setItem("plan",plan);
-    localStorage.setItem("price",price);
-    localStorage.setItem("expiry",expiry.toISOString());
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+    subscriptions.push({name:currentUser.name,email:currentUser.email,plan,price,expiry:expiry.toISOString()});
+    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
 
     alert("Subscribed to "+plan);
     showDashboard();
-}
+  }
 
-function showDashboard(){
+  function showDashboard(){
     registerSection.classList.add("hidden");
     loginSection.classList.add("hidden");
     planSection.classList.add("hidden");
     dashboardSection.classList.remove("hidden");
 
-    let user=JSON.parse(localStorage.getItem("user"));
-    let plan=localStorage.getItem("plan");
-    let price=localStorage.getItem("price");
-    let expiry=localStorage.getItem("expiry");
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    welcome.innerText = "Welcome, "+currentUser.name;
 
-    welcome.innerText="Welcome, "+user.name;
-    planInfo.innerText="Plan: "+plan+" (₹"+price+")";
-    expiryInfo.innerText="Expiry: "+new Date(expiry).toDateString();
-}
+    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+    let subHtml = "";
+    subscriptions.forEach(s=>{
+      subHtml += `<li>${s.name} - ${s.plan} - ₹${s.price} - Expiry: ${new Date(s.expiry).toDateString()}</li>`;
+    });
+    subList.innerHTML = subHtml;
+  }
 
-function logout(){
-    localStorage.removeItem("plan");
-    localStorage.removeItem("price");
-    localStorage.removeItem("expiry");
-
+  function logout(){
+    localStorage.removeItem("currentUser");
     dashboardSection.classList.add("hidden");
     planSection.classList.add("hidden");
     loginSection.classList.remove("hidden");
-}
+  }
+
 </script>
 
 </body>
