@@ -20,7 +20,9 @@ JavaScript – Functionality and localStorage data management
 
 Clone or download this repository.
 Open the index.html file in any browser.
+
 Steps to use:
+
 Register a new user
 Login with your credentials
 Choose a subscription plan
