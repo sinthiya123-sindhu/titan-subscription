@@ -1,43 +1,37 @@
-TitanSub Systems 🚀
+TitanSub Systems 💼💳
 
-A modern web-based subscription management system to manage users and their subscription plans efficiently.
+A Subscription Management System built with HTML, CSS, and JavaScript. Manage users, subscriptions, payments, and settings with a clean, central dashboard.
 
-✨ Features
+Features ✨
 
 ✅ User Registration & Login
-✅ Multiple Subscription Plans: Basic, Standard, Premium
-✅ Dashboard shows all registered users with their subscriptions
-✅ Plan expiry tracking
-✅ Responsive design with hover effects
+💳 Choose Plans: Basic, Standard, Premium
+🏷️ Select Payment Method: Credit Card, UPI, PayPal
+⏳ Subscription Expiry Countdown (days left)
+❌ Cancel Subscriptions
+💰 Toggle Paid / Unpaid Status
+⚙️ Settings: Update Name, Email, Plan, Payment Status
+📜 Dashboard: Scrollable list of all users & subscriptions
+🎨 Responsive central layout with hero image
 
-💻 Technologies Used
+Technologies Used 🛠️
 
-HTML – Structure of the web pages
-CSS – Styling and layout
-JavaScript – Functionality and localStorage data management
+HTML5 – Structure of the app
+CSS3 – Styling, gradient backgrounds, hover effects
+JavaScript – Logic for registration, login, subscriptions, payments, settings, and countdown timer
+LocalStorage – Data persistence for users and subscriptions
 
-⚡ How to Run
+How to Use 🖱️
 
-Clone or download this repository.
-Open the index.html file in any browser.
+Open index.html in a browser.
+Register a new account 📝 or Login 🔑 if you already have one.
+Choose a subscription plan 💳 and select a payment method.
+View all subscriptions in the dashboard 📜.
+Update your account or subscription in Settings ⚙️.
+Toggle Paid / Unpaid or Cancel subscriptions as needed ❌.
 
-Steps to use:
+Live Demo 🌐
+https://github.com/sinthiya123-sindhu/titan-subscription/deployments
 
-Register a new user
-Login with your credentials
-Choose a subscription plan
-View all registered users and their plans in the Dashboard
-
-🌐 Live Demo
-https://sinthiya123-sindhu.github.io/titan-subscription/
-
-🛠 Project Flow
-
-Register – Create a new account.
-Login – Access your account.
-Choose Plan – Select Basic, Standard, or Premium.
-Dashboard – View all users and subscription details.
-
-👩‍💻 Author
-
+Author 🧑‍💻 
 Made by Dhainesh Sinthiya.Y 
