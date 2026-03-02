@@ -9,8 +9,6 @@
       background: linear-gradient(135deg, #667eea, #764ba2);
       display:flex;
       justify-content:center;
-      align-items:flex-start;
-      min-height:100vh;
       flex-direction:column;
       color:white;
     }
@@ -96,9 +94,9 @@
       border-radius:10px;
       margin-top:10px;
       font-size:12px;
-      max-height:200px;
-      overflow-y:auto;
       text-align:left;
+      max-height:250px;
+      overflow-y:auto;
     }
 
     .dashboard ul{
@@ -115,6 +113,11 @@
       display:flex;
       justify-content: space-between;
       align-items:center;
+    }
+
+    .expired{
+      color:red;
+      font-weight:bold;
     }
 
     .small-btn{
@@ -136,10 +139,17 @@
     }
 
     .hero{
-      font-size:16px;
+      width:100%;
+      height:150px;
+      background:url("https://images.unsplash.com/photo-1556740749-887f6717d7e4") center/cover no-repeat;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
       font-weight:bold;
       text-shadow:1px 1px 2px #000;
       margin-bottom:10px;
+      border-radius:10px;
     }
   </style>
 </head>
@@ -210,142 +220,201 @@
   <div id="dashboardSection" class="hidden">
     <p id="welcome"></p>
     <div class="dashboard">
+      <h3>All Registered Users & Subscriptions 📜</h3>
       <ul id="subList"></ul>
     </div>
+    <button onclick="showSettings()">Settings ⚙️</button>
     <button onclick="logout()">Logout 🔒</button>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settingsSection" class="hidden">
+    <h2>Settings ⚙️</h2>
+    <input type="text" id="setName" placeholder="Change Name"><br>
+    <input type="email" id="setEmail" placeholder="Change Email"><br>
+    <select id="setPlan">
+      <option>Basic</option>
+      <option>Standard</option>
+      <option>Premium</option>
+    </select><br>
+    <select id="setPayment">
+      <option>Paid</option>
+      <option>Unpaid</option>
+    </select><br>
+    <button onclick="saveSettings()">Save ✅</button>
+    <button onclick="backDashboard()">Back 🏠</button>
   </div>
 
 </div>
 
-<footer>© 2026 TitanSub Systems | Made by Sindhu 👩‍💻</footer>
+<footer>© 2026 TitanSub Systems</footer>
 
 <script>
-  window.onload = function(){
-    let currentUser = localStorage.getItem("currentUser");
-    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-    if(currentUser && subscriptions.length>0){ showDashboard(); }
-  }
+let countdownInterval;
+window.onload = function(){
+  let currentUser = localStorage.getItem("currentUser");
+  if(currentUser){ showDashboard(); }
+}
 
-  function showLogin(){
-    registerSection.classList.add("hidden");
-    loginSection.classList.remove("hidden");
-  }
+function showLogin(){ registerSection.classList.add("hidden"); loginSection.classList.remove("hidden"); }
+function showRegister(){ loginSection.classList.add("hidden"); registerSection.classList.remove("hidden"); }
 
-  function showRegister(){
+function register(){
+  let name = regName.value.trim();
+  let email = regEmail.value.trim();
+  let password = regPassword.value.trim();
+  if(!name||!email||!password){ alert("Fill all fields ❌"); return; }
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  if(users.find(u=>u.email===email)){ alert("Email already registered ❌"); return; }
+
+  users.push({name,email,password});
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Registration Successful ✅");
+  showLogin();
+}
+
+function login(){
+  let email = loginEmail.value;
+  let password = loginPassword.value;
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let user = users.find(u=>u.email===email && u.password===password);
+
+  if(user){
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    alert("Login Successful ✅");
     loginSection.classList.add("hidden");
-    registerSection.classList.remove("hidden");
-  }
+    planSection.classList.remove("hidden");
+  } else { alert("Invalid login ❌"); }
+}
 
-  function register(){
-    let name = regName.value.trim();
-    let email = regEmail.value.trim();
-    let password = regPassword.value.trim();
-    if(!name||!email||!password){ alert("Fill all fields ❌"); return; }
+function subscribe(plan,price){
+  let method = document.getElementById("paymentMethod").value;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+  let expiry = new Date(); expiry.setMonth(expiry.getMonth()+1);
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    if(users.find(u=>u.email===email)){ alert("Email already registered ❌"); return; }
+  subscriptions.push({
+    name: currentUser.name,
+    email: currentUser.email,
+    plan,
+    price,
+    paymentMethod: method,
+    isPaid: true,
+    expiry: expiry.toISOString()
+  });
 
-    users.push({name,email,password});
+  localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  alert(`Subscribed to ${plan} 💳`);
+  showDashboard();
+}
+
+function showDashboard(){
+  registerSection.classList.add("hidden");
+  loginSection.classList.add("hidden");
+  planSection.classList.add("hidden");
+  settingsSection.classList.add("hidden");
+  dashboardSection.classList.remove("hidden");
+
+  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  welcome.innerText = `Welcome, ${currentUser.name} 👋`;
+
+  updateDashboard();
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(updateDashboard,1000);
+}
+
+function updateDashboard(){
+  let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+  let now = new Date();
+  let subHtml = "";
+  subscriptions.forEach((s,index)=>{
+    let remaining = new Date(s.expiry) - now;
+    let daysLeft = remaining>0 ? Math.floor(remaining/(1000*60*60*24)) : 0;
+    if(remaining<=0) s.isPaid=false;
+
+    let paidEmoji = s.isPaid ? "✅" : "❌";
+    let expiredClass = s.isPaid ? "" : "expired";
+    subHtml += `<li class="${expiredClass}">
+      <span>${s.name} - ${s.email} - ${s.plan} - ₹${s.price} - ${paidEmoji} Paid - ${daysLeft}d left</span>
+      <span>
+        <button class="small-btn" onclick="togglePayment(${index})">Toggle 💰</button>
+        <button class="small-btn" onclick="cancel(${index})">Cancel ❌</button>
+      </span>
+    </li>`;
+  });
+  subList.innerHTML = subHtml;
+  localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+}
+
+function togglePayment(idx){
+  let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+  subscriptions[idx].isPaid = !subscriptions[idx].isPaid;
+  localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  updateDashboard();
+}
+
+function cancel(idx){
+  let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+  subscriptions[idx].plan = "Canceled";
+  subscriptions[idx].isPaid = false;
+  localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  updateDashboard();
+}
+
+function logout(){
+  localStorage.removeItem("currentUser");
+  clearInterval(countdownInterval);
+  dashboardSection.classList.add("hidden");
+  planSection.classList.add("hidden");
+  loginSection.classList.remove("hidden");
+}
+
+function showSettings(){
+  dashboardSection.classList.add("hidden");
+  settingsSection.classList.remove("hidden");
+  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  setName.value = currentUser.name;
+  setEmail.value = currentUser.email;
+  let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+  let sub = subscriptions.find(s=>s.email===currentUser.email);
+  setPlan.value = sub ? sub.plan : "Basic";
+  setPayment.value = sub && sub.isPaid ? "Paid" : "Unpaid";
+}
+
+function saveSettings(){
+  let name = setName.value.trim();
+  let email = setEmail.value.trim();
+  let plan = setPlan.value;
+  let paymentStatus = setPayment.value;
+  if(!name||!email){ alert("Fill all fields ❌"); return; }
+
+  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let uidx = users.findIndex(u=>u.email===currentUser.email);
+  if(uidx!==-1){
+    users[uidx].name = name;
+    users[uidx].email = email;
     localStorage.setItem("users", JSON.stringify(users));
-
-    alert("Registration Successful ✅");
-    showLogin();
   }
 
-  function login(){
-    let email = loginEmail.value;
-    let password = loginPassword.value;
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    let user = users.find(u=>u.email===email && u.password===password);
+  let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+  subscriptions.forEach(s=>{
+    if(s.email === currentUser.email){
+      s.name = name;
+      s.email = email;
+      s.plan = plan;
+      s.isPaid = paymentStatus === "Paid";
+    }
+  });
+  localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  localStorage.setItem("currentUser", JSON.stringify({name,email}));
+  alert("Settings Updated ✅");
+  showDashboard();
+}
 
-    if(user){
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      alert("Login Successful ✅");
-      loginSection.classList.add("hidden");
-      planSection.classList.remove("hidden");
-    } else { alert("Invalid login ❌"); }
-  }
-
-  function subscribe(plan,price){
-    let method = document.getElementById("paymentMethod").value;
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-
-    let expiry = new Date();
-    expiry.setMonth(expiry.getMonth()+1);
-
-    subscriptions.push({
-      name: currentUser.name,
-      email: currentUser.email,
-      plan,
-      price,
-      paymentMethod: method,
-      isPaid: true, // simulate payment success
-      expiry: expiry.toISOString()
-    });
-
-    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-    alert(`Subscribed to ${plan} 💳`);
-    showDashboard();
-  }
-
-  function showDashboard(){
-    registerSection.classList.add("hidden");
-    loginSection.classList.add("hidden");
-    planSection.classList.add("hidden");
-    dashboardSection.classList.remove("hidden");
-
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    welcome.innerText = `Welcome, ${currentUser.name} 👋`;
-
-    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-    let subHtml = "";
-    subscriptions.forEach((s,index)=>{
-      let paidEmoji = s.isPaid ? "✅" : "❌";
-      subHtml += `<li>
-        <span>${s.name} - ${s.email} - ${s.plan} - ₹${s.price} - ${paidEmoji} Paid - Expiry: ${new Date(s.expiry).toDateString()}</span>
-        <span>
-          <button class="small-btn" onclick="cancel(${index})">Cancel ❌</button>
-          <button class="small-btn" onclick="upgrade(${index})">Upgrade ⬆️</button>
-          <button class="small-btn" onclick="downgrade(${index})">Downgrade ⬇️</button>
-        </span>
-      </li>`;
-    });
-    subList.innerHTML = subHtml;
-  }
-
-  function cancel(idx){
-    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-    subscriptions[idx].plan = "Canceled";
-    subscriptions[idx].isPaid = false;
-    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-    showDashboard();
-  }
-
-  function upgrade(idx){
-    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-    if(subscriptions[idx].plan === "Basic") subscriptions[idx].plan = "Standard";
-    else if(subscriptions[idx].plan === "Standard") subscriptions[idx].plan = "Premium";
-    subscriptions[idx].isPaid = true;
-    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-    showDashboard();
-  }
-
-  function downgrade(idx){
-    let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-    if(subscriptions[idx].plan === "Premium") subscriptions[idx].plan = "Standard";
-    else if(subscriptions[idx].plan === "Standard") subscriptions[idx].plan = "Basic";
-    subscriptions[idx].isPaid = true;
-    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-    showDashboard();
-  }
-
-  function logout(){
-    localStorage.removeItem("currentUser");
-    dashboardSection.classList.add("hidden");
-    planSection.classList.add("hidden");
-    loginSection.classList.remove("hidden");
-  }
+function backDashboard(){ showDashboard(); }
 </script>
 
 </body>
