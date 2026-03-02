@@ -31,7 +31,7 @@ Update your account or subscription in Settings ⚙️.
 Toggle Paid / Unpaid or Cancel subscriptions as needed ❌.
 
 Live Demo 🌐
-https://github.com/sinthiya123-sindhu/titan-subscription/deployments
+https://sinthiya123-sindhu.github.io/titan-subscription/
 
 Author 🧑‍💻 
 Made by Dhainesh Sinthiya.Y 
